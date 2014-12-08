@@ -50,6 +50,12 @@ module OpenExchangeRates
 
     def latest(reload = false)
       @latest_response = reload ? parse_latest : (@latest_response ||= parse_latest)
+      
+      if @latest_response.nil? or @latest_response['rates'].nil?
+        warn "OpenExchangeRates didn't recieve data from #{OpenExchangeRates::LATEST_URL}?app_id=#{@app_id}"
+        return nil
+      end
+      
       OpenExchangeRates::Response.new(@latest_response)
     end
 
